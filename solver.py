@@ -28,9 +28,9 @@ class Solver(object):
       self.learning_rate = float(solver_params['learning_rate'])
       self.moment = float(solver_params['moment'])
       self.max_steps = int(solver_params['max_iterators'])
-      self.train_dir = str(solver_params['train_dir'])
       self.lr_decay = float(solver_params['lr_decay'])
       self.decay_steps = int(solver_params['decay_steps'])
+    #self.train_dir = './resources/'
     self.train = train
     self.net = Net(train=train, common_params=common_params, net_params=net_params)
     self.dataset = DataSet(common_params=common_params, dataset_params=dataset_params)
@@ -42,7 +42,7 @@ class Solver(object):
       self.prior_boost_nongray = tf.placeholder(tf.float32, (self.batch_size, int(self.height / 4), int(self.width / 4), 1))
 
       self.conv8_313 = self.net.inference(self.data_l)
-      new_loss, g_loss = self.net.loss(scope, self.conv8_313, self.prior_boost_nongray, self.gt_ab_313)
+      new_los   s, g_loss = self.net.loss(scope, self.conv8_313, self.prior_boost_nongray, self.gt_ab_313)
       tf.summary.scalar('new_loss', new_loss)
       tf.summary.scalar('total_loss', g_loss)
     return new_loss, g_loss
@@ -86,7 +86,7 @@ class Solver(object):
       #saver1.restore(sess, './models/model.ckpt')
       #nilboy
       summary_writer = tf.summary.FileWriter(self.train_dir, sess.graph)
-      for step in xrange(self.max_steps):
+      for step in range(self.max_steps):
         start_time = time.time()
         t1 = time.time()
         data_l, gt_ab_313, prior_boost_nongray = self.dataset.batch()
@@ -106,7 +106,7 @@ class Solver(object):
                         'sec/batch)')
           print (format_str % (datetime.now(), step, loss_value,
                                examples_per_sec, sec_per_batch))
-        
+
         if step % 10 == 0:
           summary_str = sess.run(summary_op, feed_dict={self.data_l:data_l, self.gt_ab_313:gt_ab_313, self.prior_boost_nongray:prior_boost_nongray})
           summary_writer.add_summary(summary_str, step)

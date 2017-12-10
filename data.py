@@ -7,7 +7,7 @@ import math
 import random
 import cv2
 import numpy as np
-from Queue import Queue
+from queue import Queue
 from threading import Thread as Process
 #from multiprocessing import Process,Queue
 import time

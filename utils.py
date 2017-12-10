@@ -82,7 +82,7 @@ class NNEncode():
         self.K = self.cc.shape[0]
         self.NN = int(NN)
         self.sigma = sigma
-        self.nbrs = nn.NearestNeighbors(n_neighbors=NN, algorithm='ball_tree').fit(self.cc)
+        self.nbrs = nn.NearestNeighbors(n_neighbors=self.NN, algorithm='ball_tree').fit(self.cc)
 
         self.alreadyUsed = False
 
@@ -100,6 +100,7 @@ class NNEncode():
 
         P = pts_flt.shape[0]
 
+        #print('TALIETALIETALIE' + str(pts_flt))
         (dists,inds) = self.nbrs.kneighbors(pts_flt)
 
         wts = np.exp(-dists**2/(2*self.sigma**2))
@@ -181,9 +182,9 @@ class PriorFactor():
             self.print_correction_stats()
 
     def print_correction_stats(self):
-        print 'Prior factor correction:'
-        print '  (alpha,gamma) = (%.2f, %.2f)'%(self.alpha,self.gamma)
-        print '  (min,max,mean,med,exp) = (%.2f, %.2f, %.2f, %.2f, %.2f)'%(np.min(self.prior_factor),np.max(self.prior_factor),np.mean(self.prior_factor),np.median(self.prior_factor),np.sum(self.prior_factor*self.prior_probs))
+        print('Prior factor correction:')
+        print('  (alpha,gamma) = (%.2f, %.2f)'%(self.alpha,self.gamma))
+        print('  (min,max,mean,med,exp) = (%.2f, %.2f, %.2f, %.2f, %.2f)'%(np.min(self.prior_factor),np.max(self.prior_factor),np.mean(self.prior_factor),np.median(self.prior_factor),np.sum(self.prior_factor*self.prior_probs)))
 
     def forward(self,data_ab_quant,axis=1):
         data_ab_maxind = np.argmax(data_ab_quant,axis=axis)
